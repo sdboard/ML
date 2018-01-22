@@ -9,7 +9,7 @@ whiteAndFluffy.options.display.max_rows = 200
 whiteAndFluffy.options.display.max_columns = 30
 import os
 #import csv
-filename = '/Users/AllahBoard/Downloads/MoneyWalk.csv'
+filename = ' '# eg /Users/username/foldername/filename.csv
 global bulk_data, cleanData, states
 bulk_data = whiteAndFluffy.read_csv(filename, error_bad_lines=False, engine='python', header = 0)
 cleanData = whiteAndFluffy.DataFrame()
@@ -121,7 +121,7 @@ for item in charges:
 print('it\'s ' + str(int(sum - 1.9)))
 
 
-# In[84]:
+# In[58]:
 
 datesDF= whiteAndFluffy.DataFrame(dates)
 datesDF.columns=['date']
@@ -134,25 +134,14 @@ locationDF.columns = ['state']
 GoodData = whiteAndFluffy.concat([datesDF,descriptionDF,locationDF,chargesDF], axis=1)
 
 
-# In[85]:
+# In[59]:
 
 GoodData
 
 
-# In[86]:
-
-Cat = whiteAndFluffy.DataFrame({"Category":['food','groceries','housing','project','groceries','parking','groceries','food','food','project','project','groceries','project','groceries','water','food','project','food','groceries','food','fuel','fuel','groceries','party','food'], 
-                                "Outcome":['personal','living','living','business','living','business','living','personal','personal','business','business','living','business','living','living','personal','business','personal','living','personal','business','business','living','personal','personal']})
+# In[ ]:
 
 
-# In[87]:
-
-GoodData = whiteAndFluffy.concat([GoodData,Cat], axis = 1)
-
-
-# In[88]:
-
-GoodData
 
 
 # In[ ]:

@@ -12,7 +12,7 @@ whiteAndFluffy.options.display.max_rows = 200
 
 # In[4]:
 
-filename = '/Users/AllahBoard/Downloads/MoneyWalk.csv'
+filename = ' '
 global bulk_data, cleanData
 bulk_data = whiteAndFluffy.read_csv(filename, error_bad_lines=False, engine='python', header = 0)
 cleanData = whiteAndFluffy.DataFrame()
