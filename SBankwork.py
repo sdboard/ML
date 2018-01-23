@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[33]:
+# In[138]:
 
 import numpy as np
 import pandas as whiteAndFluffy
@@ -9,19 +9,29 @@ whiteAndFluffy.options.display.max_rows = 200
 whiteAndFluffy.options.display.max_columns = 30
 import os
 #import csv
-filename = '/Users/AllahBoard/Downloads/MoneyWalk.csv'
+filename = ' ' #eg /Users/username/direcotry/folder/filename.csv
 global bulk_data, cleanData, states
 bulk_data = whiteAndFluffy.read_csv(filename, error_bad_lines=False, engine='python', header = 0)
 cleanData = whiteAndFluffy.DataFrame()
 states = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
 
 
-# In[34]:
+# In[159]:
 
-#bulk_data
+def isanan(value):
+    try:
+        np.isnan(value)
+        return True
+    except ValueError:
+        return False
 
 
-# In[42]:
+# In[140]:
+
+bulk_data
+
+
+# In[141]:
 
 period = whiteAndFluffy.DataFrame()
 info = []
@@ -37,12 +47,12 @@ info.append(bulk_data.iloc[i,5])
 period = period.append(info, ignore_index = True)
 
 
-# In[43]:
+# In[142]:
 
-#period
+period
 
 
-# In[44]:
+# In[143]:
 
 quiteclean = whiteAndFluffy.DataFrame()
 selection = []
@@ -52,26 +62,51 @@ while (curVal != 'Purchases,' and i < len(bulk_data)):
     curVal = bulk_data.iloc[i,0]
     i = i + 1
 while curVal != 'TOTAL':
+    if curVal == 'Detach':
+        while (curVal != 'Purchases,' and i < len(bulk_data)):
+            curVal = bulk_data.iloc[i,0]
+            i = i + 1
     selection.append(bulk_data.iloc[i])
     i = i + 1;
     curVal = bulk_data.iloc[i,0]       
 quiteclean =quiteclean.append(selection, ignore_index = True)
 
 
-# In[45]:
+# In[144]:
 
-#quiteclean
+quiteclean
 
 
-# In[46]:
+# In[165]:
+
+whiteAndFluffy.isnull(quiteclean.iloc[4,7])
+
+
+# In[146]:
 
 dates= quiteclean.iloc[:,[0]]
 #dates
 
 
-# In[47]:
+# In[176]:
 
 description = []
+charge = []
+location = []
+for i in range(len(quiteclean)):
+    newSeries = quiteclean.iloc[i,:]
+    words = []
+    j = 3
+    while not whiteAndFluffy.isnull(newSeries[j]):
+        if j > 5:
+            words.append(newSeries[j-3])
+        j = j + 1
+    location.append(newSeries[j-2])
+    charge.append(newSeries[j-1])
+    curStr = ' '.join(words)
+    description.append(curStr)   
+
+'''description = []
 charge = []
 location = []
 for i in range(len(quiteclean)):
@@ -84,36 +119,36 @@ for i in range(len(quiteclean)):
     location.append(newSeries[j])
     charge.append(newSeries[j+1])
     curStr = ' '.join(words)
-    description.append(curStr)   
+    description.append(curStr)'''   
 
 
-# In[48]:
+# In[177]:
 
-#location
-
-
-# In[49]:
-
-#charge
+location
 
 
-# In[50]:
+# In[178]:
+
+charge
+
+
+# In[179]:
 
 #words
 
 
-# In[51]:
+# In[180]:
 
 #description
 
 
-# In[52]:
+# In[181]:
 
 charges = list(map(float, charge))
 #charges
 
 
-# In[65]:
+# In[182]:
 
 sum = 0
 for item in charges:
@@ -121,7 +156,7 @@ for item in charges:
 print('it\'s ' + str(int(sum - 1.9)))
 
 
-# In[84]:
+# In[183]:
 
 datesDF= whiteAndFluffy.DataFrame(dates)
 datesDF.columns=['date']
@@ -134,25 +169,65 @@ locationDF.columns = ['state']
 GoodData = whiteAndFluffy.concat([datesDF,descriptionDF,locationDF,chargesDF], axis=1)
 
 
-# In[85]:
+# In[184]:
 
 GoodData
 
 
-# In[86]:
+# In[186]:
 
-Cat = whiteAndFluffy.DataFrame({"Category":['food','groceries','housing','project','groceries','parking','groceries','food','food','project','project','groceries','project','groceries','water','food','project','food','groceries','food','fuel','fuel','groceries','party','food'], 
-                                "Outcome":['personal','living','living','business','living','business','living','personal','personal','business','business','living','business','living','living','personal','business','personal','living','personal','business','business','living','personal','personal']})
+Cat = whiteAndFluffy.DataFrame({"Category":['groceries','food','education','food','travel','water','groceries','health','groceries','travel','food','groceries','food','music','groceries','groceries','taxes','taxes','parking','taxes','water','food','fuel','parking','groceries','education'], 
+                                "Outcome":['living','personal','business','personal','personal','living','living','living','living','personal','personal','living','personal','personal','living','living','business','business','business','business','living','personal','business','business','living','business']})
 
 
-# In[87]:
+# In[188]:
 
 GoodData = whiteAndFluffy.concat([GoodData,Cat], axis = 1)
 
 
-# In[88]:
+# In[189]:
 
 GoodData
+
+
+# In[89]:
+
+GoodDataJan = GoodData
+
+
+# In[90]:
+
+GoodDataJan = GoodData
+
+
+# In[91]:
+
+GoodDataJan
+
+
+# In[190]:
+
+GoodDataFeb = GoodData
+
+
+# In[191]:
+
+GoodDataFeb
+
+
+# In[195]:
+
+TotalGoodDataTF = GoodDataJan.append(GoodDataFeb, ignore_index = True)
+
+
+# In[196]:
+
+TotalGoodDataTF
+
+
+# In[199]:
+
+TotalGoodDataTF.to_csv(path_or_buf=' ') #eg /Users/username/Desktop/TotalData.csv
 
 
 # In[ ]:
